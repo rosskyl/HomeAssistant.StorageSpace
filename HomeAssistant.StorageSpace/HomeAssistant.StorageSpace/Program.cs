@@ -26,11 +26,18 @@ namespace HomeAssistant.StorageSpace
             var drives = DriveInfo.GetDrives();
             foreach (var drive in drives)
             {
-                var pct = (double)drive.AvailableFreeSpace / (double)drive.TotalSize * 100;
-                var message = string.Format("{0:0.0}", pct);
-                var topic = mqttConfig.Topic + "/" + drive.Name.Replace(":\\", "");
-                var r = client.Publish(topic, Encoding.UTF8.GetBytes(message));
-                await Task.Delay(1000);
+                try
+                {
+                    if (drive.DriveType != DriveType.CDRom)
+                    {
+                        var pct = (double)drive.AvailableFreeSpace / (double)drive.TotalSize * 100;
+                        var message = string.Format("{0:0.0}", pct);
+                        var topic = mqttConfig.Topic + "/" + drive.Name.Replace(":\\", "");
+                        var r = client.Publish(topic, Encoding.UTF8.GetBytes(message));
+                        await Task.Delay(1000);
+                    }
+                }
+                catch (Exception) { }
             }
 
             client.Disconnect();
