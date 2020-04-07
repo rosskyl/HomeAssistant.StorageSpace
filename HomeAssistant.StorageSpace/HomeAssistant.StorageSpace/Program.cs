@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration.Json;
 using uPLibrary.Networking.M2Mqtt;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace HomeAssistant.StorageSpace
 {
@@ -46,7 +47,7 @@ namespace HomeAssistant.StorageSpace
         private static IConfiguration BuildConfig()
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json");
 
             return builder.Build();
