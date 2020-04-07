@@ -31,10 +31,9 @@ namespace HomeAssistant.StorageSpace
                 {
                     if (drive.DriveType != DriveType.CDRom)
                     {
-                        var pct = (double)drive.AvailableFreeSpace / (double)drive.TotalSize * 100;
-                        var message = string.Format("{0:0.0}", pct);
+                        var pct = (float)(1000 * (drive.TotalSize - drive.AvailableFreeSpace) / drive.TotalSize)/10;
                         var topic = mqttConfig.Topic + "/" + drive.Name.Replace(":\\", "");
-                        var r = client.Publish(topic, Encoding.UTF8.GetBytes(message));
+                        var r = client.Publish(topic, Encoding.UTF8.GetBytes(pct.ToString()));
                         await Task.Delay(1000);
                     }
                 }
