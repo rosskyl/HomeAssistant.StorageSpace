@@ -7,6 +7,7 @@ using uPLibrary.Networking.M2Mqtt;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace HomeAssistant.StorageSpace
 {
@@ -33,7 +34,7 @@ namespace HomeAssistant.StorageSpace
                     {
                         var pct = (float)(1000 * (drive.TotalSize - drive.AvailableFreeSpace) / drive.TotalSize)/10;
                         var topic = mqttConfig.Topic + "/" + drive.Name.Replace(":\\", "");
-                        var r = client.Publish(topic, Encoding.UTF8.GetBytes(pct.ToString()));
+                        var r = client.Publish(topic, Encoding.UTF8.GetBytes(pct.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, true);
                         await Task.Delay(1000);
                     }
                 }
